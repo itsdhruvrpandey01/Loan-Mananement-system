@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <h2 class="mb-3 text-center">Available Loan Schemes</h2>
+
+  <div class="row">
+    <div class="col-md-4 mb-3" *ngFor="let loan of loanSchemes">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ loan.loanName }}</h5>
+          <p class="card-text">Interest Rate: {{ loan.interestRate }}%</p>
+          <p class="card-text">Amount: ₹{{ loan.minLoanAmount }} - ₹{{ loan.maxLoanAmount }}</p>
+          <p class="card-text">Max Tenure: {{ loan.maxTenure }} months</p>
+          <button class="btn btn-primary w-100" (click)="applyLoan(loan)">Apply Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

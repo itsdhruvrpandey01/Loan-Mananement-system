@@ -1,0 +1,37 @@
+<div class="container mt-4">
+  <h2>Apply for Loan</h2>
+
+  <form [formGroup]="applyLoanForm" (ngSubmit)="applyForLoan()" class="mt-3">
+    <div class="mb-3">
+      <label>Loan Amount</label>
+      <input formControlName="loanAmount" type="number" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>Tenure (months)</label>
+      <input formControlName="tenure" type="number" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>Loan Scheme ID</label>
+      <input formControlName="loanSchemeId" type="number" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>Occupation</label>
+      <input formControlName="occupation" type="text" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>Monthly Income</label>
+      <input formControlName="monthlyIncome" type="number" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>Applicant Age</label>
+      <input formControlName="applicantAge" type="number" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="applyLoanForm.invalid">Apply</button>
+  </form>
+</div>

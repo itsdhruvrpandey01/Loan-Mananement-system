@@ -1,0 +1,41 @@
+<div class="container mt-4">
+  <h2 class="mb-3 text-center">Available Loan Schemes</h2>
+
+  <div class="row">
+    <!-- Left: Loan Schemes List -->
+    <div class="col-md-6">
+      <div class="list-group">
+        <button
+          *ngFor="let scheme of loanSchemes"
+          class="list-group-item list-group-item-action"
+          (click)="viewDetails(scheme)">
+          <strong>{{ scheme.loanName }}</strong>
+          <span class="badge bg-primary float-end">{{ scheme.interestRate }}%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: Selected Scheme Details -->
+    <div class="col-md-6" *ngIf="selectedScheme">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4>{{ selectedScheme.loanName }}</h4>
+          <p><strong>Loan Type ID:</strong> {{ selectedScheme.loanTypeId }}</p>
+          <p><strong>Min Amount:</strong> ₹{{ selectedScheme.minLoanAmount }}</p>
+          <p><strong>Max Amount:</strong> ₹{{ selectedScheme.maxLoanAmount }}</p>
+          <p><strong>Interest Rate:</strong> {{ selectedScheme.interestRate }}%</p>
+          <p><strong>Tenure:</strong> up to {{ selectedScheme.maxTenure }} months</p>
+          <p><strong>Age Limit:</strong> {{ selectedScheme.minAge }} - {{ selectedScheme.maxAge }} years</p>
+          <p><strong>Min Income:</strong> ₹{{ selectedScheme.minIncome }}</p>
+          <p><strong>Collateral Required:</strong> {{ selectedScheme.collateralRequired ? 'Yes' : 'No' }}</p>
+          <p><strong>Installment Duration:</strong> {{ selectedScheme.installmentDurationType }}</p>
+          <p><strong>Processing Fee:</strong> ₹{{ selectedScheme.processingFeeFlat }}</p>
+          <p><strong>Early Closure Charge:</strong> ₹{{ selectedScheme.earlyClosureCharge }}</p>
+          <p><strong>Default Penalty Rate:</strong> {{ selectedScheme.defaultPenaltyRate }}%</p>
+
+          <button class="btn btn-secondary mt-2" (click)="clearSelection()">Back to List</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

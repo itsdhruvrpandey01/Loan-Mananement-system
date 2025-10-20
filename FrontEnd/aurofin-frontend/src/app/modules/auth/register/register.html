@@ -1,0 +1,50 @@
+<div class="register-container">
+  <h2>Register</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+
+    <label>First Name</label>
+    <input formControlName="firstName" type="text" />
+
+    <label>Middle Name</label>
+    <input formControlName="middleName" type="text" />
+
+    <label>Last Name</label>
+    <input formControlName="lastName" type="text" />
+
+    <label>Email</label>
+    <input formControlName="email" type="email" />
+
+    <label>Password</label>
+    <input formControlName="password" type="password" />
+
+    <label>Mobile</label>
+    <input formControlName="mobile" type="text" />
+
+    <label>Gender</label>
+    <select formControlName="gender">
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <h3>Address</h3>
+    <div formGroupName="address">
+      <label>Street</label>
+      <input formControlName="street" type="text" />
+
+      <label>Area</label>
+      <input formControlName="area" type="text" />
+
+      <label>City</label>
+      <input formControlName="city" type="text" />
+
+      <label>Pincode</label>
+      <input formControlName="pincode" type="text" />
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+</div>

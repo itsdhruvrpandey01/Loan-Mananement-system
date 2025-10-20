@@ -1,0 +1,21 @@
+.employee-container {
+  margin: 20px;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table th,
+.employee-table td {
+  padding: 8px;
+  text-align: left;
+}
+
+.pagination-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

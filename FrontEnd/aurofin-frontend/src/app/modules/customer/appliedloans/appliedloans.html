@@ -1,0 +1,62 @@
+<!-- Filter Section -->
+<div class="filter-section">
+  <h3>Filter by Status</h3>
+  <button (click)="filterByStatus('pending')">Pending</button>
+  <button (click)="filterByStatus('approved')">Approved</button>
+  <button (click)="filterByStatus('rejected')">Rejected</button>
+  <button (click)="clearFilter()">Clear Filter</button>
+</div>
+
+<!-- Applied Loans List -->
+<div class="applied-loans-container">
+  <h2>My Applied Loans</h2>
+  
+  <div *ngIf="appliedLoans.length === 0" class="no-loans">
+    <p>No loan applications found.</p>
+  </div>
+
+  <div *ngIf="appliedLoans.length > 0" class="loans-list">
+    <div *ngFor="let loan of appliedLoans" class="loan-card">
+      <div class="loan-header">
+        <!-- <h3>Application ID: {{ loan.applicationId }}</h3> -->
+        <span class="status" [ngClass]="loan.status.toLowerCase()">
+          {{ loan.status }}
+        </span>
+      </div>
+      
+      <div class="loan-details">
+        <p><strong>Requested Amount:</strong> ₹{{ loan.requestedAmount | number:'1.2-2' }}</p>
+        <p><strong>Total Loan Amount:</strong> ₹{{ loan.totalLoanAmount | number:'1.2-2' }}</p>
+        <p><strong>Tenure:</strong> {{ loan.requestedTenure }} months</p>
+        <p><strong>Applied On:</strong> {{ loan.createdAt | date:'dd/MM/yyyy' }}</p>
+        <!-- <p><strong>Last Updated:</strong> {{ loan.updatedAt | date:'dd/MM/yyyy' }}</p> -->
+      </div>
+      
+      <div class="loan-actions">
+        <button class="btn-view">View Details</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div *ngIf="totalPages > 1" class="pagination">
+    <button 
+      (click)="goToPreviousPage()" 
+      [disabled]="currentPage === 0"
+      class="btn-pagination">
+      Previous
+    </button>
+    
+    <span class="page-info">
+      Page {{ currentPage + 1 }} of {{ totalPages }} 
+      (Total: {{ totalElements }} loans)
+    </span>
+    
+    <button ></button>
+      <!-- (click)="goToNextPage()" 
+      [disabled]="isLastPage"
+      class="btn-pagination"> -->
+      Next
+    <!-- </button> -->
+  </div>
+</div>

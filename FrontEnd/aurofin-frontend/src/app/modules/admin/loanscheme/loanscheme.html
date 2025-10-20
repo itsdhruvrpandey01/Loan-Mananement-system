@@ -1,0 +1,116 @@
+<div class="container mt-4">
+  <h2>Create Loan Scheme</h2>
+  <form [formGroup]="loanForm" (ngSubmit)="onSubmit()">
+
+    <!-- Loan Name -->
+    <div class="mb-3">
+      <label>Loan Name *</label>
+      <input formControlName="loanName" class="form-control" placeholder="Enter loan name" />
+    </div>
+
+    <!-- Loan Type Dropdown -->
+    <div class="mb-3">
+      <label>Loan Type *</label>
+      <select formControlName="loanTypeId" class="form-select">
+        <option value="">Select loan type</option>
+        <option *ngFor="let type of loanTypes" [value]="type.id">
+          {{ type.typeName }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Numeric Fields -->
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label>Min Loan Amount</label>
+        <input type="number" formControlName="minLoanAmount" class="form-control" />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Max Loan Amount</label>
+        <input type="number" formControlName="maxLoanAmount" class="form-control" />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Interest Rate (%)</label>
+        <input type="number" formControlName="interestRate" class="form-control" />
+      </div>
+    </div>
+
+    <!-- Tenure & Age -->
+    <div class="row">
+      <div class="col-md-3 mb-3">
+        <label>Max Tenure (months)</label>
+        <input type="number" formControlName="maxTenure" class="form-control" />
+      </div>
+      <div class="col-md-3 mb-3">
+        <label>Min Age</label>
+        <input type="number" formControlName="minAge" class="form-control" />
+      </div>
+      <div class="col-md-3 mb-3">
+        <label>Max Age</label>
+        <input type="number" formControlName="maxAge" class="form-control" />
+      </div>
+      <div class="col-md-3 mb-3">
+        <label>Min Income</label>
+        <input type="number" formControlName="minIncome" class="form-control" />
+      </div>
+    </div>
+
+    <!-- Collateral Required -->
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" formControlName="collateralRequired" (change)="onCollateralToggle()" />
+      <label class="form-check-label">Collateral Required?</label>
+    </div>
+
+    <!-- Collateral Requirements Section -->
+    <div *ngIf="loanForm.get('collateralRequired')?.value">
+      <h5>Collateral Requirements</h5>
+      <div formArrayName="collateralRequirements">
+        <div *ngFor="let group of collateralRequirements.controls; let i = index" [formGroupName]="i" class="mb-3 border p-3 rounded">
+          <label>Collateral:</label>
+          <select formControlName="collatoralId" class="form-select mb-2">
+            <option *ngFor="let collateral of collaterals" [value]="collateral.collateralTypeId">
+              {{ collateral.typeName }}
+            </option>
+          </select>
+
+          <label>Required Documents (comma-separated)</label>
+          <input type="text" formControlName="requiredDocuments" class="form-control" placeholder="e.g. PAN, ID Proof" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Other Fields -->
+    <div class="mb-3">
+      <label>Other Conditions</label>
+      <textarea formControlName="otherConditions" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label>Installment Duration Type</label>
+      <select formControlName="installmentDurationType" class="form-select">
+        <option value="">Select type</option>
+        <option value="MONTHLY">MONTHLY</option>
+        <option value="QUARTERLY">QUARTERLY</option>
+        <option value="YEARLY">YEARLY</option>
+      </select>
+    </div>
+
+    <!-- Charges -->
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label>Processing Fee (%)</label>
+        <input type="number" formControlName="processingFeeFlat" class="form-control" />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Early Closure Charge (%)</label>
+        <input type="number" formControlName="earlyClosureCharge" class="form-control" />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Default Penalty Rate (%)</label>
+        <input type="number" formControlName="defaultPenaltyRate" class="form-control" />
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+  </form>
+</div>

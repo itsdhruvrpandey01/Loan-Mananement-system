@@ -1,0 +1,84 @@
+<div class="container">
+  <h2>Add Manager</h2>
+
+  <form [formGroup]="managerForm" (ngSubmit)="onSubmit()" class="mt-4">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        formControlName="email"
+        [class.is-invalid]="managerForm.get('email')?.invalid && managerForm.get('email')?.touched"
+      />
+      <div class="invalid-feedback">Enter a valid email.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        formControlName="password"
+        [class.is-invalid]="managerForm.get('password')?.invalid && managerForm.get('password')?.touched"
+      />
+      <div class="invalid-feedback">Password must be at least 6 characters.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="city" class="form-label">City</label>
+      <input
+        type="text"
+        id="city"
+        class="form-control"
+        formControlName="city"
+        [class.is-invalid]="managerForm.get('city')?.invalid && managerForm.get('city')?.touched"
+      />
+      <div class="invalid-feedback">City is required.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="pincode" class="form-label">Pincode</label>
+      <input
+        type="text"
+        id="pincode"
+        class="form-control"
+        formControlName="pincode"
+        [class.is-invalid]="managerForm.get('pincode')?.invalid && managerForm.get('pincode')?.touched"
+      />
+      <div class="invalid-feedback">Pincode must be 6 digits.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="designation" class="form-label">Designation</label>
+      <input
+        type="text"
+        id="designation"
+        class="form-control"
+        formControlName="designation"
+        [class.is-invalid]="managerForm.get('designation')?.invalid && managerForm.get('designation')?.touched"
+      />
+      <div class="invalid-feedback">Designation is required.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="salary" class="form-label">Salary</label>
+      <input
+        type="number"
+        id="salary"
+        class="form-control"
+        formControlName="salary"
+        [class.is-invalid]="managerForm.get('salary')?.invalid && managerForm.get('salary')?.touched"
+      />
+      <div class="invalid-feedback">Enter a valid salary.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="managerForm.invalid">
+      Submit
+    </button>
+  </form>
+</div>
+
+
+<router-outlet></router-outlet>

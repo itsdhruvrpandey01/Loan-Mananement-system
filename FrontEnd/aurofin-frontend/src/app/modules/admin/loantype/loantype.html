@@ -1,0 +1,41 @@
+<div class="container mt-4" style="max-width: 500px;">
+  <h2>Add Loan Type</h2>
+  <form [formGroup]="loanTypeForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <label for="typeName" class="form-label">Loan Type Name <span class="text-danger">*</span></label>
+      <input
+        id="typeName"
+        type="text"
+        formControlName="typeName"
+        class="form-control"
+        placeholder="Enter loan type name"
+        [class.is-invalid]="typeName.invalid && (typeName.dirty || typeName.touched)"
+      />
+      <div *ngIf="typeName.invalid && (typeName.dirty || typeName.touched)" class="invalid-feedback">
+        Loan type name is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description (Optional)</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        class="form-control"
+        placeholder="Enter description"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="loanTypeForm.invalid || isSubmitting">
+      {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+    </button>
+
+    <div *ngIf="submissionSuccess" class="alert alert-success mt-3">
+      Loan type added successfully!
+    </div>
+    <div *ngIf="submissionError" class="alert alert-danger mt-3">
+      {{ submissionError }}
+    </div>
+  </form>
+</div>
