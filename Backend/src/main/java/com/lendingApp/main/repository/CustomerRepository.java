@@ -1,5 +1,6 @@
 package com.lendingApp.main.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.lendingApp.main.entity.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer,UUID>{
-    
+	Optional<Customer> findByUser_UserId(UUID userId);
 }

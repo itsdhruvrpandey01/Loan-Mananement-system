@@ -9,6 +9,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +39,7 @@ import com.lendingApp.main.service.UserService;
 
 @RestController
 @RequestMapping("/loan-app/customer")
+@CrossOrigin(origins="*")
 public class CustomerController {
 
     @Autowired
@@ -47,41 +50,50 @@ public class CustomerController {
 
     @Autowired
     private FeedbackService feedbackService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private InstallmentsSerivce installmentsSerivce;
-    
+
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/{customerId}/loans/application/installments")
-    public ResponseEntity<PageResponseDto<InstallmentDto>> getAppliedLoans(@PathVariable UUID customerId,@RequestParam(name="page") int page,@RequestParam(name = "size") int size) { 
-    	return ResponseEntity.ok(installmentsSerivce.getUnpaidInstallmentsBeforeMonth(customerId,page,size));
+    public ResponseEntity<PageResponseDto<InstallmentDto>> getAppliedLoans(@PathVariable UUID customerId,
+            @RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+        return ResponseEntity.ok(installmentsSerivce.getUnpaidInstallmentsBeforeMonth(customerId, page, size));
     }
-    
+
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/{customerId}/loans/application")
-    public ResponseEntity<PageResponseDto<ApplicationResponse>> getAppliedLoans(@PathVariable UUID customerId,@RequestParam(required = false) String status,@RequestParam(name="page") int page,@RequestParam(name = "size") int size) { 
-    	System.out.println(status);
-    	return ResponseEntity.ok(userService.getAllAppliedLoans(customerId,status,page,size));
+    public ResponseEntity<PageResponseDto<ApplicationResponse>> getAppliedLoans(@PathVariable UUID customerId,
+            @RequestParam(required = false) String status, @RequestParam(name = "page") int page,
+            @RequestParam(name = "size") int size) {
+        System.out.println(status);
+        return ResponseEntity.ok(userService.getAllAppliedLoans(customerId, status, page, size));
     }
-    
+
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PostMapping("/{customerId}/loans/application")
-    public ResponseEntity<ApplicationResponse> applyLoans(@PathVariable UUID customerId,@RequestBody ApplicationDto applicationDto) { 
-        return ResponseEntity.ok(userService.applyLoan(applicationDto,customerId));
+    public ResponseEntity<ApplicationResponse> applyLoans(@PathVariable UUID customerId,
+            @RequestBody ApplicationDto applicationDto) {
+        return ResponseEntity.ok(userService.applyLoan(applicationDto, customerId));
     }
-    
+
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PutMapping("/loans/application/{applicationId}")
     public ResponseEntity<DocumentResponseDto> uploadRequiredDocuments(
-    		@PathVariable UUID applicationId,
-		    @RequestParam("files") List<MultipartFile> files,
-		    @RequestParam("docTypes") List<String> docTypes) throws IOException{
-    			return ResponseEntity.ok(this.userService.uploadDocuments(applicationId, files, docTypes));
-    		}
+            @PathVariable UUID applicationId,
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("docTypes") List<String> docTypes) throws IOException {
+        return ResponseEntity.ok(this.userService.uploadDocuments(applicationId, files, docTypes));
+    }
 
     /**
      * Upload KYC Document
      * POST /loan-app/customer/documents
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PostMapping("/documents")
     public ResponseEntity<DocumentResponseDto> uploadDocument(
             @RequestBody DocumentUploadDto documentUploadDto,
@@ -94,6 +106,7 @@ public class CustomerController {
      * Get all documents for a customer
      * GET /loan-app/customer/documents?customerId=xxx
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/documents")
     public ResponseEntity<List<DocumentResponseDto>> getDocuments(@RequestParam UUID customerId) {
         List<DocumentResponseDto> documents = documentService.getDocumentsByCustomerId(customerId);
@@ -104,6 +117,7 @@ public class CustomerController {
      * Get document by ID
      * GET /loan-app/customer/documents/{docId}
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/documents/{docId}")
     public ResponseEntity<DocumentResponseDto> getDocumentById(@PathVariable UUID docId) {
         DocumentResponseDto document = documentService.getDocumentById(docId);
@@ -114,6 +128,8 @@ public class CustomerController {
      * Delete document
      * DELETE /loan-app/customer/documents/{docId}
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+
     @DeleteMapping("/documents/{docId}")
     public ResponseEntity<Map<String, String>> deleteDocument(@PathVariable UUID docId) {
         documentService.deleteDocument(docId);
@@ -126,6 +142,7 @@ public class CustomerController {
      * Get all notifications for logged-in user
      * GET /loan-app/customer/notifications?userId=xxx
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/notifications")
     public ResponseEntity<List<NotificationDto>> getNotifications(@RequestParam UUID userId) {
         List<NotificationDto> notifications = notificationService.getAllNotifications(userId);
@@ -136,6 +153,7 @@ public class CustomerController {
      * Get unread notifications
      * GET /loan-app/customer/notifications/unread?userId=xxx
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/notifications/unread")
     public ResponseEntity<List<NotificationDto>> getUnreadNotifications(@RequestParam UUID userId) {
         List<NotificationDto> notifications = notificationService.getUnreadNotifications(userId);
@@ -146,6 +164,7 @@ public class CustomerController {
      * Get unread notification count
      * GET /loan-app/customer/notifications/unread/count?userId=xxx
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/notifications/unread/count")
     public ResponseEntity<Map<String, Long>> getUnreadCount(@RequestParam UUID userId) {
         long count = notificationService.getUnreadCount(userId);
@@ -158,6 +177,7 @@ public class CustomerController {
      * Mark notification as read
      * PUT /loan-app/customer/notifications/{notificationId}/read
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PutMapping("/notifications/{notificationId}/read")
     public ResponseEntity<NotificationDto> markAsRead(@PathVariable UUID notificationId) {
         NotificationDto notification = notificationService.markAsRead(notificationId);
@@ -168,6 +188,7 @@ public class CustomerController {
      * Mark all notifications as read
      * PUT /loan-app/customer/notifications/read-all?userId=xxx
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PutMapping("/notifications/read-all")
     public ResponseEntity<Map<String, String>> markAllAsRead(@RequestParam UUID userId) {
         notificationService.markAllAsRead(userId);
@@ -182,6 +203,7 @@ public class CustomerController {
      * Submit feedback or query
      * POST /loan-app/customer/feedback
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PostMapping("/feedback")
     public ResponseEntity<FeedbackResponseDto> submitFeedback(
             @RequestBody FeedbackRequestDto feedbackRequestDto,
@@ -194,6 +216,7 @@ public class CustomerController {
      * Get all feedbacks submitted by customer
      * GET /loan-app/customer/feedback?userId=xxx
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/feedback")
     public ResponseEntity<List<FeedbackResponseDto>> getMyFeedbacks(@RequestParam UUID userId) {
         List<FeedbackResponseDto> feedbacks = feedbackService.getMyFeedbacks(userId);
@@ -204,10 +227,11 @@ public class CustomerController {
      * Get feedback by ID
      * GET /loan-app/customer/feedback/{feedbackId}
      */
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @GetMapping("/feedback/{feedbackId}")
     public ResponseEntity<FeedbackResponseDto> getFeedbackById(@PathVariable UUID feedbackId) {
         FeedbackResponseDto feedback = feedbackService.getFeedbackById(feedbackId);
         return ResponseEntity.ok(feedback);
     }
-    
+
 }

@@ -1,9 +1,14 @@
 package com.lendingApp.main.service.impl;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +16,7 @@ import com.lendingApp.main.dto.AddressDto;
 import com.lendingApp.main.dto.AddressResponseDto;
 import com.lendingApp.main.dto.EmployeeRequestDto;
 import com.lendingApp.main.dto.EmployeeResponseDto;
+import com.lendingApp.main.dto.PageResponseDto;
 import com.lendingApp.main.dto.UpdateEmployeeDetailsDto;
 import com.lendingApp.main.dto.UpdatedEmployeeResponseDto;
 import com.lendingApp.main.entity.Address;
@@ -19,6 +25,7 @@ import com.lendingApp.main.entity.Role;
 import com.lendingApp.main.entity.User;
 import com.lendingApp.main.exception.ResourceNotFoundException;
 import com.lendingApp.main.exception.UserNotFoundException;
+import com.lendingApp.main.helper.PaginationUtils;
 import com.lendingApp.main.repository.EmployeeRepository;
 import com.lendingApp.main.repository.RoleRepository;
 import com.lendingApp.main.repository.UserRepository;
@@ -51,6 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public EmployeeResponseDto addEmployee(EmployeeRequestDto employeeRequestDto) {
 		User user = mapper.map(employeeRequestDto, User.class);
+		user.setPassword(passwordEncoder.encode(employeeRequestDto.getPassword()));
 		Role managerRole = roleRepository.findByRoleName("ROLE_MANAGER")
 		        .orElseThrow(() -> new ResourceNotFoundException("No role with name ROLE_MANAGER"));
 		    user.setRole(managerRole);
@@ -58,6 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		User savedUser = this.userRepository.save(user);
 		Employee employee = mapper.map(employeeRequestDto, Employee.class);
 		employee.setUser(savedUser);
+		
 		Employee savedEmployee = this.employeeRepository.save(employee);
 		return mapper.map(savedEmployee, EmployeeResponseDto.class);
 	}
@@ -137,5 +146,20 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return mapper.map(savedUser.getAddress(),AddressResponseDto.class);
 	}
 
+	@Override
+	public PageResponseDto<EmployeeResponseDto> getAllEmployees(int page, int size) {
+	    Pageable pageable = PageRequest.of(page, size);
+	    Page<Employee> pageEmployee = employeeRepository.findAll(pageable);
+
+	    List<EmployeeResponseDto> employees = pageEmployee
+	        .stream()
+	        .map(employee -> mapper.map(employee, EmployeeResponseDto.class)) // ✅ Correct mapping
+	        .collect(Collectors.toList());
+
+	    return PaginationUtils.buildPageResponse(pageEmployee, employees);
+	}
+
+
+	
 	
 }

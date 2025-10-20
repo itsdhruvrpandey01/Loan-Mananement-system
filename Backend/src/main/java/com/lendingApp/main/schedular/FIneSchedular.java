@@ -30,7 +30,7 @@ public class FIneSchedular {
 
 	    for (Installment installment : overdueInstallments) {
 	        double currentFine = installment.getFineAmt() != null ? installment.getFineAmt() : 0.0;
-	        double fineToAdd = installment.getInstAmt() * 0.02;
+	        double fineToAdd = installment.getInstAmt() * installment.getApplication().getLoanRequirement().getDefaultPenaltyRate();
 	        double updatedFine = currentFine + fineToAdd;
 
 	        installment.setFineAmt(updatedFine);

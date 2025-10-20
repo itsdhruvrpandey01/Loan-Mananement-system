@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.lendingApp.main.dto.LoanCollateralRequestDto;
 import com.lendingApp.main.dto.LoanResponseDto;
 import com.lendingApp.main.dto.LoanSchemeDto;
+import com.lendingApp.main.dto.UpdateLoanSchemeDto;
 import com.lendingApp.main.entity.CollateralTypeEntity;
 import com.lendingApp.main.entity.LoanScheme;
 import com.lendingApp.main.entity.LoanSchemeCollateralRequirement;
@@ -97,8 +98,10 @@ public class LoanSchemeServiceImpl implements LoanSchemeService {
 		List<LoanScheme> loanSchemes = loanSchemeRepository.findAll();
 		List<LoanResponseDto> loanResponseDtos = new ArrayList<>();
 		for (LoanScheme loanScheme : loanSchemes) {
-			if (loanScheme.isActive())
+			if (loanScheme.isActive()) {
 				loanResponseDtos.add(mapper.map(loanScheme, LoanResponseDto.class));
+				
+			}
 		}
 		return loanResponseDtos;
 	}
@@ -130,4 +133,100 @@ public class LoanSchemeServiceImpl implements LoanSchemeService {
 		loan = loanSchemeRepository.save(loan);
 		return mapper.map(loan, LoanResponseDto.class);
 	}
+
+	@Override
+	@Transactional
+	public LoanResponseDto updateLoanScheme(Long id, UpdateLoanSchemeDto dto) {
+
+	    LoanScheme existingLoan = loanSchemeRepository.findById(id)
+	        .orElseThrow(() -> new LoanException("Loan Scheme not found with id: " + id));
+
+	    // Only update if present
+	    if (dto.getLoanName() != null && !dto.getLoanName().isBlank()) {
+	        existingLoan.setLoanName(dto.getLoanName());
+	    }
+
+	    if (dto.getLoanTypeId() != null) {
+	        LoanTypeEntity loanType = loanTypeRepository.findById(dto.getLoanTypeId())
+	            .orElseThrow(() -> new IllegalArgumentException("Loan Type not found with ID: " + dto.getLoanTypeId()));
+	        existingLoan.setLoanType(loanType);
+	    }
+
+	    if (dto.getMinLoanAmount() != null) {
+	        existingLoan.setMinLoanAmount(dto.getMinLoanAmount());
+	    }
+
+	    if (dto.getMaxLoanAmount() != null) {
+	        existingLoan.setMaxLoanAmount(dto.getMaxLoanAmount());
+	    }
+
+	    if (dto.getInterestRate() != null) {
+	        existingLoan.setInterestRate(dto.getInterestRate());
+	    }
+
+	    if (dto.getMaxTenure() != null) {
+	        existingLoan.setMaxTenure(dto.getMaxTenure());
+	    }
+
+	    if (dto.getMinAge() != null) {
+	        existingLoan.setMinAge(dto.getMinAge());
+	    }
+
+	    if (dto.getMaxAge() != null) {
+	        existingLoan.setMaxAge(dto.getMaxAge());
+	    }
+
+	    if (dto.getMinIncome() != null) {
+	        existingLoan.setMinIncome(dto.getMinIncome());
+	    }
+
+	    if (dto.getCollateralRequired() != null) {
+	        existingLoan.setCollateralRequired(dto.getCollateralRequired());
+
+	        // Clear and set new collateral requirements if provided
+	        existingLoan.getCollateralRequirements().clear();
+	        if (dto.getCollateralRequired() && dto.getCollateralRequirements() != null) {
+	            List<LoanSchemeCollateralRequirement> requirements = new ArrayList<>();
+
+	            for (LoanCollateralRequestDto collateralDto : dto.getCollateralRequirements()) {
+	                CollateralTypeEntity collateralType = collateralTypeRepository.findById(collateralDto.getCollatoralId())
+	                    .orElseThrow(() -> new IllegalArgumentException(
+	                        "Collateral Type not found with ID: " + collateralDto.getCollatoralId()));
+
+	                LoanSchemeCollateralRequirement req = new LoanSchemeCollateralRequirement();
+	                req.setLoanScheme(existingLoan);
+	                req.setCollateralType(collateralType);
+	                req.setRequiredDocuments(collateralDto.getRequiredDocuments());
+
+	                requirements.add(req);
+	            }
+
+	            existingLoan.setCollateralRequirements(requirements);
+	        }
+	    }
+
+	    if (dto.getOtherConditions() != null) {
+	        existingLoan.setOtherConditions(dto.getOtherConditions());
+	    }
+
+	    if (dto.getInstallmentDurationType() != null) {
+	        existingLoan.setInstallmentDurationType(dto.getInstallmentDurationType());
+	    }
+
+	    if (dto.getProcessingFeeFlat() != null) {
+	        existingLoan.setProcessingFeeFlat(dto.getProcessingFeeFlat());
+	    }
+
+	    if (dto.getEarlyClosureCharge() != null) {
+	        existingLoan.setEarlyClosureCharge(dto.getEarlyClosureCharge());
+	    }
+
+	    if (dto.getDefaultPenaltyRate() != null) {
+	        existingLoan.setDefaultPenaltyRate(dto.getDefaultPenaltyRate());
+	    }
+
+	    LoanScheme updatedLoan = loanSchemeRepository.save(existingLoan);
+	    return mapper.map(updatedLoan, LoanResponseDto.class);
+	}
+
 }

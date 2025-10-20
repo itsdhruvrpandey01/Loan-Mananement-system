@@ -27,4 +27,5 @@ public interface UserService {
     AddressResponseDto updateAddress(UUID userId,AddressDto addressDto);
     AddressResponseDto getUserAddress(UUID userId);
     PageResponseDto<ApplicationResponse> getAllAppliedLoans(UUID customerId,String status,int page,int size);
+    UUID getCustomerID(UUID userID);
 }

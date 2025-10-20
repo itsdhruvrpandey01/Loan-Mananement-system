@@ -2,6 +2,7 @@ package com.lendingApp.main.dto;
 
 import com.lendingApp.main.enums.InstallmentDurationType;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -64,13 +65,16 @@ public class LoanSchemeDto {
     // New fields added:
     @NotNull(message = "Processing fee is required")
     @PositiveOrZero(message = "Processing fee cannot be negative")
+    @Max(value=100)
     private Double processingFeeFlat;
 
     @NotNull(message = "Early closure charge is required")
     @PositiveOrZero(message = "Early closure charge cannot be negative")
+    @Max(value=100)
     private Double earlyClosureCharge;
 
     @NotNull(message = "Default penalty rate is required")
     @PositiveOrZero(message = "Default penalty rate cannot be negative")
+    @Max(value=100)
     private Double defaultPenaltyRate;
 }

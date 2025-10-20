@@ -312,5 +312,12 @@ public class UserServiceImpl implements UserService{
 	    return response;
 	}
 
+
+	@Override
+	public UUID getCustomerID(UUID userID) {
+		Customer customer =this.customerRepository.findByUser_UserId(userID).get();
+		return customer.getCustomerId();
+	}
+
     
 }

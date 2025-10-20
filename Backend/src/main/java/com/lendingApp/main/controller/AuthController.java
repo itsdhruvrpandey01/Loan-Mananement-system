@@ -16,7 +16,8 @@ import com.lendingApp.main.service.AuthService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin
+@CrossOrigin(origins = "*")
+
 public class AuthController {
 
     @Autowired
