@@ -21,6 +21,9 @@ import com.lendingApp.main.dto.AddressResponseDto;
 import com.lendingApp.main.dto.UserDetailsResponseDto;
 import com.lendingApp.main.dto.UserDetailsUpdateDto;
 import com.lendingApp.main.service.UserService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -30,13 +33,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_MANAGER')")
 	@GetMapping("/profile/{userId}")
 	public ResponseEntity<UserDetailsResponseDto> getUser(@PathVariable UUID userId) {
 		return ResponseEntity.ok(userService.findUserProfileById(userId));
 	}
 
-	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_MANAGER')")
 	@PutMapping("profile/{userId}")
 	public ResponseEntity<UserDetailsResponseDto> updateUser(@PathVariable UUID userId,
 			@ModelAttribute UserDetailsUpdateDto userDetailsUpdateDto,
@@ -44,23 +47,27 @@ public class UserController {
 		return ResponseEntity.ok(userService.udpdateUserProfile(userId, userDetailsUpdateDto, file));
 	}
 
-	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_MANAGER')")
 	@PutMapping("profile/address/{userId}")
 	public ResponseEntity<AddressResponseDto> updateUserAddress(@PathVariable UUID userId,
-			@RequestBody AddressDto addressDto) {
+			@Valid @RequestBody AddressDto addressDto) {
 		return ResponseEntity.ok(userService.updateAddress(userId, addressDto));
 	}
 
-	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_MANAGER')")
 	@GetMapping("profile/address/{userId}")
 	public ResponseEntity<AddressResponseDto> getUserAddress(@PathVariable UUID userId) {
 		return ResponseEntity.ok(userService.getUserAddress(userId));
 	}
 	
 	@GetMapping("/getCusomerID/{userID}")
-	public ResponseEntity<UUID> getMethodName(@PathVariable UUID userID) {
+	public ResponseEntity<UUID> getCustomerID(@PathVariable UUID userID) {
 		return ResponseEntity.ok(userService.getCustomerID(userID));
 	}
 	
+	@GetMapping("/managers/{userID}")
+	public ResponseEntity<UUID> getManagerID(@PathVariable UUID userID) {
+		return ResponseEntity.ok(userService.getManagerID(userID));
+	}
 
 }

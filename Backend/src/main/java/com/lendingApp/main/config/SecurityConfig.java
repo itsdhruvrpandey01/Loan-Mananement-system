@@ -64,6 +64,8 @@
 		
  		http.authorizeHttpRequests(request -> request.requestMatchers("/api/register").permitAll());
  		http.authorizeHttpRequests(request -> request.requestMatchers("/api/login").permitAll());
+ 		http.authorizeHttpRequests(request -> request.requestMatchers("/api/forgot-password").permitAll());
+ 		http.authorizeHttpRequests(request -> request.requestMatchers("/api/reset-password").permitAll());
 		
  		http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/studentapp/**"));
  		http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/studentapp/**"));

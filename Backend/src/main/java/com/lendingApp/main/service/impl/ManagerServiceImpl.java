@@ -13,6 +13,7 @@ import com.lendingApp.main.dto.AppliedLoanApplications;
 import com.lendingApp.main.dto.DocumentResponseDto;
 import com.lendingApp.main.dto.LoanResponseDto;
 import com.lendingApp.main.entity.Application;
+import com.lendingApp.main.entity.Customer;
 import com.lendingApp.main.entity.Document;
 import com.lendingApp.main.entity.Employee;
 import com.lendingApp.main.entity.User;
@@ -80,6 +81,10 @@ public class ManagerServiceImpl implements ManagerService {
 			AppliedLoanApplications appliedApplication = mapper.map(application,AppliedLoanApplications.class);
 			appliedApplication.setDocumentResponseDto(mapDocument(application.getDocuments()));
 			appliedApplication.setLoanResponse(mapper.map(application.getLoanRequirement(),LoanResponseDto.class));
+			User user = application.getCustomer().getUser();
+			appliedApplication.setCustomerEmail(user.getEmail());
+			appliedApplication.setCustomerMobileNumber(user.getMobile());
+			appliedApplication.setCustomerName(user.getFirstName()+" "+user.getLastName());
 			allLoanApplication.add(appliedApplication);
 		}
 		return allLoanApplication;

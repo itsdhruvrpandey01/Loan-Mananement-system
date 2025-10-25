@@ -37,6 +37,8 @@ import com.lendingApp.main.service.InstallmentsSerivce;
 import com.lendingApp.main.service.NotificationService;
 import com.lendingApp.main.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/loan-app/customer")
 @CrossOrigin(origins="*")
@@ -76,7 +78,7 @@ public class CustomerController {
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PostMapping("/{customerId}/loans/application")
     public ResponseEntity<ApplicationResponse> applyLoans(@PathVariable UUID customerId,
-            @RequestBody ApplicationDto applicationDto) {
+    		@Valid @RequestBody ApplicationDto applicationDto) {
         return ResponseEntity.ok(userService.applyLoan(applicationDto, customerId));
     }
 
@@ -96,7 +98,7 @@ public class CustomerController {
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PostMapping("/documents")
     public ResponseEntity<DocumentResponseDto> uploadDocument(
-            @RequestBody DocumentUploadDto documentUploadDto,
+    		@Valid @RequestBody DocumentUploadDto documentUploadDto,
             @RequestParam UUID customerId) {
         DocumentResponseDto response = documentService.uploadDocument(documentUploadDto, customerId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -206,7 +208,7 @@ public class CustomerController {
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     @PostMapping("/feedback")
     public ResponseEntity<FeedbackResponseDto> submitFeedback(
-            @RequestBody FeedbackRequestDto feedbackRequestDto,
+    		@Valid @RequestBody FeedbackRequestDto feedbackRequestDto,
             @RequestParam UUID userId) {
         FeedbackResponseDto response = feedbackService.submitFeedback(feedbackRequestDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

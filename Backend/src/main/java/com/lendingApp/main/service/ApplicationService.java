@@ -1,6 +1,7 @@
 package com.lendingApp.main.service;
 
 import com.lendingApp.main.dto.ApplicationResponse;
+import com.lendingApp.main.dto.AppliedLoanApplications;
 import com.lendingApp.main.entity.Application;
 import java.util.List;
 import java.util.UUID;
@@ -12,4 +13,5 @@ public interface ApplicationService {
 	ApplicationResponse rejectLoan(UUID id, String reason);
 	List<String> getMissingDocuments(UUID applicationID);
 	Application findApplicationById(UUID applicationID);
+	AppliedLoanApplications getAppliedLoanById(UUID applicationID);
 }

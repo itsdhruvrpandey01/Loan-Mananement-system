@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 public class UpdateLoanSchemeDto {
 	
 	    private String loanName;
-	    
-	    private Long loanTypeId;
 
 	    private Double minLoanAmount;
 
@@ -39,12 +37,9 @@ public class UpdateLoanSchemeDto {
 
 	    private InstallmentDurationType installmentDurationType;
 
-	    
 	    private Double processingFeeFlat;
-
 	    
 	    private Double earlyClosureCharge;
 
-	   
 	    private Double defaultPenaltyRate;
 }

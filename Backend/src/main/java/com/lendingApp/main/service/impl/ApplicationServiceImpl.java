@@ -12,10 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lendingApp.main.dto.ApplicationResponse;
+import com.lendingApp.main.dto.AppliedLoanApplications;
+import com.lendingApp.main.dto.DocumentResponseDto;
 import com.lendingApp.main.dto.InstallmentDto;
+import com.lendingApp.main.dto.LoanResponseDto;
 import com.lendingApp.main.entity.Application;
 import com.lendingApp.main.entity.Document;
 import com.lendingApp.main.entity.Installment;
+import com.lendingApp.main.entity.User;
 import com.lendingApp.main.exception.ResourceNotFoundException;
 import com.lendingApp.main.exception.UserNotFoundException;
 import com.lendingApp.main.helper.InstallmentCreation;
@@ -120,4 +124,27 @@ public class ApplicationServiceImpl implements ApplicationService {
 		
 		return this.applicationRepository.findById(applicationId).orElseThrow(()->new UserNotFoundException("no application with id :"+applicationId));
 	}
+
+
+	@Override
+	public AppliedLoanApplications getAppliedLoanById(UUID applicationID) {
+		Application application = findApplicationById(applicationID);
+		AppliedLoanApplications appliedApplication = model.map(application,AppliedLoanApplications.class);
+		appliedApplication.setDocumentResponseDto(mapDocument(application.getDocuments()));
+		appliedApplication.setLoanResponse(model.map(application.getLoanRequirement(),LoanResponseDto.class));
+		User user = application.getCustomer().getUser();
+		appliedApplication.setCustomerEmail(user.getEmail());
+		appliedApplication.setCustomerMobileNumber(user.getMobile());
+		appliedApplication.setCustomerName(user.getFirstName()+" "+user.getLastName());
+		return appliedApplication;
+	}
+	private List<DocumentResponseDto> mapDocument(List<Document>docs){
+		List<DocumentResponseDto> documentResponseDtos = new ArrayList<>();
+		for(Document doc:docs) {
+			documentResponseDtos.add(model.map(doc, DocumentResponseDto.class));
+		}
+		return documentResponseDtos;
+	}
+	
+	
 }

@@ -7,4 +7,6 @@ import com.lendingApp.main.dto.PageResponseDto;
 
 public interface InstallmentsSerivce {
 	PageResponseDto<InstallmentDto> getUnpaidInstallmentsBeforeMonth(UUID customerId,int limit,int offset);
+	InstallmentDto getInstallmentById(UUID installmentId);
+	void updateInstallment(UUID installmentId);
 }

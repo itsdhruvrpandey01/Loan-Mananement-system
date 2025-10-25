@@ -146,12 +146,6 @@ public class LoanSchemeServiceImpl implements LoanSchemeService {
 	        existingLoan.setLoanName(dto.getLoanName());
 	    }
 
-	    if (dto.getLoanTypeId() != null) {
-	        LoanTypeEntity loanType = loanTypeRepository.findById(dto.getLoanTypeId())
-	            .orElseThrow(() -> new IllegalArgumentException("Loan Type not found with ID: " + dto.getLoanTypeId()));
-	        existingLoan.setLoanType(loanType);
-	    }
-
 	    if (dto.getMinLoanAmount() != null) {
 	        existingLoan.setMinLoanAmount(dto.getMinLoanAmount());
 	    }
@@ -180,30 +174,24 @@ public class LoanSchemeServiceImpl implements LoanSchemeService {
 	        existingLoan.setMinIncome(dto.getMinIncome());
 	    }
 
-	    if (dto.getCollateralRequired() != null) {
-	        existingLoan.setCollateralRequired(dto.getCollateralRequired());
-
-	        // Clear and set new collateral requirements if provided
+	    if (dto.getCollateralRequired() && dto.getCollateralRequirements() != null) {
+	        // Clear the existing collection safely
 	        existingLoan.getCollateralRequirements().clear();
-	        if (dto.getCollateralRequired() && dto.getCollateralRequirements() != null) {
-	            List<LoanSchemeCollateralRequirement> requirements = new ArrayList<>();
 
-	            for (LoanCollateralRequestDto collateralDto : dto.getCollateralRequirements()) {
-	                CollateralTypeEntity collateralType = collateralTypeRepository.findById(collateralDto.getCollatoralId())
-	                    .orElseThrow(() -> new IllegalArgumentException(
-	                        "Collateral Type not found with ID: " + collateralDto.getCollatoralId()));
+	        for (LoanCollateralRequestDto collateralDto : dto.getCollateralRequirements()) {
+	            CollateralTypeEntity collateralType = collateralTypeRepository.findById(collateralDto.getCollatoralId())
+	                .orElseThrow(() -> new IllegalArgumentException(
+	                    "Collateral Type not found with ID: " + collateralDto.getCollatoralId()));
 
-	                LoanSchemeCollateralRequirement req = new LoanSchemeCollateralRequirement();
-	                req.setLoanScheme(existingLoan);
-	                req.setCollateralType(collateralType);
-	                req.setRequiredDocuments(collateralDto.getRequiredDocuments());
+	            LoanSchemeCollateralRequirement req = new LoanSchemeCollateralRequirement();
+	            req.setLoanScheme(existingLoan);
+	            req.setCollateralType(collateralType);
+	            req.setRequiredDocuments(collateralDto.getRequiredDocuments());
 
-	                requirements.add(req);
-	            }
-
-	            existingLoan.setCollateralRequirements(requirements);
+	            existingLoan.getCollateralRequirements().add(req); // ✅ Add to the existing collection
 	        }
 	    }
+
 
 	    if (dto.getOtherConditions() != null) {
 	        existingLoan.setOtherConditions(dto.getOtherConditions());

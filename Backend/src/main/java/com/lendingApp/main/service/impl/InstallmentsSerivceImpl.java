@@ -17,6 +17,7 @@ import com.lendingApp.main.dto.InstallmentDto;
 import com.lendingApp.main.dto.PageResponseDto;
 import com.lendingApp.main.entity.Installment;
 import com.lendingApp.main.enums.InstallmentStatus;
+import com.lendingApp.main.exception.ResourceNotFoundException;
 import com.lendingApp.main.repository.InstallmentsRepository;
 import com.lendingApp.main.service.InstallmentsSerivce;
 
@@ -59,5 +60,15 @@ public class InstallmentsSerivceImpl implements InstallmentsSerivce {
 
 	    return pageres;
 	}
-
+	@Override
+	public InstallmentDto getInstallmentById(UUID installmentId) {
+		Installment installment = installmentsRepository.findById(installmentId).orElseThrow(()->new ResourceNotFoundException("no installment with id"+installmentId));
+		return mapper.map(installment, InstallmentDto.class);
+	}
+	@Override
+	public void updateInstallment(UUID installmentId) {
+		Installment installment = installmentsRepository.findById(installmentId).orElseThrow(()->new ResourceNotFoundException("no installment with id"+installmentId));
+		installment.setStatus(installment.getStatus()==InstallmentStatus.OVERDUE?InstallmentStatus.LATE:InstallmentStatus.PAID);
+		installment.setPaidDate(LocalDate.now());
+	}
 }

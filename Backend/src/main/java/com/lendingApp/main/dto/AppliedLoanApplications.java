@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 public class AppliedLoanApplications {
 	
 	private UUID applicationId;
+	private String customerEmail;
+	private String customerName;
+	private String customerMobileNumber;
 
     private String status; // pending / approved / rejected
     private Double requestedAmount;

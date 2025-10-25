@@ -34,6 +34,8 @@ import com.lendingApp.main.service.LoanSchemeService;
 import com.lendingApp.main.service.LoanTypeService;
 import com.lendingApp.main.service.RoleService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("loan-app/admin")
 @CrossOrigin(origins = "*")
@@ -56,7 +58,7 @@ public class AdminController {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/role")
-	public ResponseEntity<RoleResponseDto> postMethodName(@RequestBody RoleDto roleDto) {
+	public ResponseEntity<RoleResponseDto> postMethodName(@Valid @RequestBody RoleDto roleDto) {
 		return ResponseEntity.ok(roleService.addRole(roleDto));
 	}
 
@@ -69,19 +71,19 @@ public class AdminController {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/loans")
-	public ResponseEntity<LoanResponseDto> addLoanScheme(@RequestBody LoanSchemeDto loanSchemeDto) {
+	public ResponseEntity<LoanResponseDto> addLoanScheme(@Valid @RequestBody LoanSchemeDto loanSchemeDto) {
 		return ResponseEntity.ok(loanSchemeService.addLoanScheme(loanSchemeDto));
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/loans/{loanId}")
+	@GetMapping("/loans/{loanSchemeId}")
 	public ResponseEntity<LoanResponseDto> getLoandByID(@PathVariable Long loanSchemeId) {
 		return ResponseEntity.ok(loanSchemeService.findLoandById(loanSchemeId));
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/loans")
-	public ResponseEntity<List<LoanResponseDto>> getLoanSchemes(@RequestParam(required = false) String loanType) {
+	public ResponseEntity<List<LoanResponseDto>> getLoanSchemes(@Valid @RequestParam(required = false) String loanType) {
 		if (loanType == null) {
 			return ResponseEntity.ok(loanSchemeService.getAllLoans());
 		} else {
@@ -111,20 +113,20 @@ public class AdminController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/managers")
 	public ResponseEntity<EmployeeResponseDto> updateManagerDetails(
-			@RequestBody EmployeeRequestDto employeeRequestDto) {
+			@Valid @RequestBody EmployeeRequestDto employeeRequestDto) {
 		return ResponseEntity.ok(this.employeeService.addEmployee(employeeRequestDto));
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping("/manager/{employeeID}")
 	public ResponseEntity<EmployeeResponseDto> addCityToManager(@PathVariable UUID employeeId,
-			@RequestBody String city) {
+			@Valid @RequestBody String city) {
 		return ResponseEntity.ok(this.employeeService.updateCity(employeeId, city));
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/loans/loantype")
-	public ResponseEntity<LoanTypeResponseDto> addLoanType(@RequestBody LoanTypeDto loanTypeDto) {
+	public ResponseEntity<LoanTypeResponseDto> addLoanType(@Valid @RequestBody LoanTypeDto loanTypeDto) {
 		return ResponseEntity.ok(this.loanTypeService.addLoanType(loanTypeDto));
 	}
 	
@@ -135,7 +137,7 @@ public class AdminController {
 	}
 
 	@PostMapping("/loans/collaterals")
-	public ResponseEntity<CollatoralTypeResponseDto> addCollaterals(@RequestBody CollateralTypeDto collateralTypeDto) {
+	public ResponseEntity<CollatoralTypeResponseDto> addCollaterals(@Valid @RequestBody CollateralTypeDto collateralTypeDto) {
 		return ResponseEntity.ok(this.collateralService.addCollatoralType(collateralTypeDto));
 	}
 
@@ -148,7 +150,7 @@ public class AdminController {
 	@PutMapping("/loans/{loanId}")
 	public ResponseEntity<LoanResponseDto> updateLoanScheme(
 	        @PathVariable Long loanId,
-	        @RequestBody UpdateLoanSchemeDto dto) {
+	        @Valid @RequestBody UpdateLoanSchemeDto dto) {
 	    return ResponseEntity.ok(loanSchemeService.updateLoanScheme(loanId, dto));
 	}
 	
@@ -157,5 +159,6 @@ public class AdminController {
             @RequestParam(name = "size") int size) {
 		return ResponseEntity.ok(employeeService.getAllEmployees(page,size));
 	}
+	
 	
 }
