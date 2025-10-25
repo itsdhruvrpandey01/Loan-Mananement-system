@@ -13,6 +13,14 @@ import { LoginResponseDto } from '../../../entity/LoginResponseDto';
 export class Login {
   loginForm: FormGroup;
   errorMessage: string = '';
+  showPassword = false;
+
+togglePasswordVisibility() {
+  this.showPassword = !this.showPassword;
+  const pwdInput = document.getElementById('password') as HTMLInputElement;
+  pwdInput.type = this.showPassword ? 'text' : 'password';
+}
+
 
   constructor(
     private fb: FormBuilder,

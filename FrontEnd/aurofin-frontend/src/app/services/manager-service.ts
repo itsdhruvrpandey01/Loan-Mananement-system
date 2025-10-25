@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApplicationResponse } from '../entity/ApplicationResponse';
 import { EmployeeResponseDto } from '../entity/EmployeeResponseDto';
@@ -18,6 +18,14 @@ export class ManagerService {
 
   constructor(private http: HttpClient) { }
 
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
   // 2. Approve Loan
   approveLoan(applicationId: string): Observable<ApplicationResponse> {
     return this.http.put<ApplicationResponse>(`${this.baseUrl}/loans/${applicationId}/approve`, null);
@@ -35,6 +43,28 @@ export class ManagerService {
     return this.http.get<EmployeeResponseDto>(`${this.baseUrl}/profile/${managerId}`);
   }
 
+  updateEmployeeDetails(employeeId: string, details: UpdateEmployeeDetailsDto): Observable<UpdatedEmployeeResponseDto> {
+    return this.http.post<UpdatedEmployeeResponseDto>(
+      `${this.baseUrl}/${employeeId}/details`,
+      details,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  updateAddress(employeeId: string, address: AddressDto): Observable<AddressResponseDto> {
+    return this.http.post<AddressResponseDto>(
+      `${this.baseUrl}/${employeeId}/address`,
+      address,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // Helper method to get employee ID from localStorage
+  getEmployeeId(): string | null {
+    return localStorage.getItem('eId');
+  }
+
+
   // 5. Approve Customer KYC
   approveCustomerKyc(customerId: string): Observable<string> {
     return this.http.post(`${this.baseUrl}/customers/${customerId}/kyc/approve`, null, { responseType: 'text' });
@@ -46,9 +76,9 @@ export class ManagerService {
   }
 
   // Update Employee Details
-  updateEmployeeDetails(employeeId: string, employeeDetails: UpdateEmployeeDetailsDto): Observable<UpdatedEmployeeResponseDto> {
-    return this.http.post<UpdatedEmployeeResponseDto>(`${this.baseUrl}/${employeeId}/details`, employeeDetails);
-  }
+  // updateEmployeeDetails(employeeId: string, employeeDetails: UpdateEmployeeDetailsDto): Observable<UpdatedEmployeeResponseDto> {
+  //   return this.http.post<UpdatedEmployeeResponseDto>(`${this.baseUrl}/${employeeId}/details`, employeeDetails);
+  // }
 
   // Update Employee Address
   updateEmployeeAddress(employeeId: string, address: AddressDto): Observable<AddressResponseDto> {
@@ -65,4 +95,22 @@ export class ManagerService {
     return this.http.get<string[]>(`${this.baseUrl}/applications/${applicationId}/missing-documents`);
   }
 
+
+  // Add these methods to your ManagerService
+
+  getEmployeeDetails(employeeId: string): Observable<UpdatedEmployeeResponseDto> {
+    return this.http.get<UpdatedEmployeeResponseDto>(
+      `${this.baseUrl}/manager/${employeeId}/details`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  getEmployeeAddress(employeeId: string): Observable<AddressResponseDto> {
+    return this.http.get<AddressResponseDto>(
+      `${this.baseUrl}/manager/${employeeId}/address`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  
 }

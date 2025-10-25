@@ -1,0 +1,13 @@
+.login-page .bg-image {
+  background: url('/assets/loan-bg.jpg') center/cover no-repeat;
+}
+.login-page .bg-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+}
+.login-page .bg-image > .text-center {
+  position: relative;
+  z-index: 1;
+}

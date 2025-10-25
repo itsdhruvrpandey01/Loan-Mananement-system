@@ -1,0 +1,45 @@
+.form-card {
+  background: #ffffffcc;
+  backdrop-filter: blur(12px);
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, #007bff, #00c3ff);
+}
+
+.bg-light-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.fancy-input {
+  border: 1px solid #ced4da;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0 transparent;
+}
+.fancy-input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.3);
+}
+
+.section-title h5 {
+  font-weight: 600;
+  border-left: 4px solid #0d6efd;
+  padding-left: 10px;
+}
+
+.collateral-box:hover {
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+.submit-btn {
+  border-radius: 50px;
+  transition: 0.3s;
+}
+.submit-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(13, 110, 253, 0.4);
+}

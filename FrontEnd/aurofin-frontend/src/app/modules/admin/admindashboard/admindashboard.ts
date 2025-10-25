@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './admindashboard.css'
 })
 export class Admindashboard {
+currentYear = new Date().getFullYear();
 
 }

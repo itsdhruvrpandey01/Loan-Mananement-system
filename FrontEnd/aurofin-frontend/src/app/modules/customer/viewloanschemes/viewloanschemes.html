@@ -8,9 +8,15 @@
         <button
           *ngFor="let scheme of loanSchemes"
           class="list-group-item list-group-item-action"
+          [class.active]="selectedScheme?.loanTypeId === scheme.loanTypeId"
           (click)="viewDetails(scheme)">
-          <strong>{{ scheme.loanName }}</strong>
-          <span class="badge bg-primary float-end">{{ scheme.interestRate }}%</span>
+          <div class="d-flex w-100 justify-content-between">
+            <strong>{{ scheme.loanName }}</strong>
+            <span class="badge bg-primary">{{ scheme.interestRate }}%</span>
+          </div>
+          <small *ngIf="scheme.collateralRequired" class="text-muted">
+            <i class="bi bi-shield-check"></i> Collateral Required
+          </small>
         </button>
       </div>
     </div>
@@ -18,22 +24,114 @@
     <!-- Right: Selected Scheme Details -->
     <div class="col-md-6" *ngIf="selectedScheme">
       <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">{{ selectedScheme.loanName }}</h4>
+        </div>
         <div class="card-body">
-          <h4>{{ selectedScheme.loanName }}</h4>
-          <p><strong>Loan Type ID:</strong> {{ selectedScheme.loanTypeId }}</p>
-          <p><strong>Min Amount:</strong> ₹{{ selectedScheme.minLoanAmount }}</p>
-          <p><strong>Max Amount:</strong> ₹{{ selectedScheme.maxLoanAmount }}</p>
-          <p><strong>Interest Rate:</strong> {{ selectedScheme.interestRate }}%</p>
-          <p><strong>Tenure:</strong> up to {{ selectedScheme.maxTenure }} months</p>
-          <p><strong>Age Limit:</strong> {{ selectedScheme.minAge }} - {{ selectedScheme.maxAge }} years</p>
-          <p><strong>Min Income:</strong> ₹{{ selectedScheme.minIncome }}</p>
-          <p><strong>Collateral Required:</strong> {{ selectedScheme.collateralRequired ? 'Yes' : 'No' }}</p>
-          <p><strong>Installment Duration:</strong> {{ selectedScheme.installmentDurationType }}</p>
-          <p><strong>Processing Fee:</strong> ₹{{ selectedScheme.processingFeeFlat }}</p>
-          <p><strong>Early Closure Charge:</strong> ₹{{ selectedScheme.earlyClosureCharge }}</p>
-          <p><strong>Default Penalty Rate:</strong> {{ selectedScheme.defaultPenaltyRate }}%</p>
+          <div class="row mb-2">
+            <div class="col-6"><strong>Loan Type ID:</strong></div>
+            <div class="col-6">{{ selectedScheme.loanTypeId }}</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-6"><strong>Loan Amount:</strong></div>
+            <div class="col-6">₹{{ selectedScheme.minLoanAmount | number }} - ₹{{ selectedScheme.maxLoanAmount | number }}</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-6"><strong>Interest Rate:</strong></div>
+            <div class="col-6">{{ selectedScheme.interestRate }}% p.a.</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-6"><strong>Tenure:</strong></div>
+            <div class="col-6">Up to {{ selectedScheme.maxTenure }} months</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-6"><strong>Age Limit:</strong></div>
+            <div class="col-6">{{ selectedScheme.minAge }} - {{ selectedScheme.maxAge }} years</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-6"><strong>Min Income:</strong></div>
+            <div class="col-6">₹{{ selectedScheme.minIncome | number }}</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-6"><strong>Installment Type:</strong></div>
+            <div class="col-6">{{ selectedScheme.installmentDurationType }}</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-6"><strong>Processing Fee:</strong></div>
+            <div class="col-6">₹{{ selectedScheme.processingFeeFlat | number }}</div>
+          </div>
+          
+          <div class="row mb-2">
+            <div class="col-6"><strong>Early Closure:</strong></div>
+            <div class="col-6">₹{{ selectedScheme.earlyClosureCharge | number }}</div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-6"><strong>Default Penalty:</strong></div>
+            <div class="col-6">{{ selectedScheme.defaultPenaltyRate }}%</div>
+          </div>
 
-          <button class="btn btn-secondary mt-2" (click)="clearSelection()">Back to List</button>
+          <!-- Collateral Requirements Section -->
+          <div *ngIf="selectedScheme.collateralRequired" class="alert alert-warning">
+            <h5 class="alert-heading">
+              <i class="bi bi-shield-exclamation"></i> Collateral Required
+            </h5>
+            
+            <div *ngIf="selectedScheme.collateralRequirements && selectedScheme.collateralRequirements.length > 0">
+              <div *ngFor="let collateral of selectedScheme.collateralRequirements; let i = index" class="mb-3">
+                <h6 class="mb-2">Collateral Type {{ i + 1 }} (ID: {{ collateral.collatoralId }})</h6>
+                
+                <div *ngIf="collateral.requiredDocuments && collateral.requiredDocuments.length > 0">
+                  <p class="mb-1"><strong>Required Documents:</strong></p>
+                  <ul class="mb-0">
+                    <li *ngFor="let doc of collateral.requiredDocuments">{{ doc }}</li>
+                  </ul>
+                </div>
+                <div *ngIf="!collateral.requiredDocuments || collateral.requiredDocuments.length === 0">
+                  <p class="text-muted mb-0">No specific documents listed</p>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="!selectedScheme.collateralRequirements || selectedScheme.collateralRequirements.length === 0">
+              <p class="mb-0">Collateral required - specific requirements to be determined</p>
+            </div>
+          </div>
+
+          <div *ngIf="!selectedScheme.collateralRequired" class="alert alert-success">
+            <i class="bi bi-check-circle"></i> No Collateral Required
+          </div>
+
+          <!-- Other Conditions -->
+          <div *ngIf="selectedScheme.otherConditions" class="alert alert-info">
+            <h6>Other Conditions:</h6>
+            <p class="mb-0">{{ selectedScheme.otherConditions }}</p>
+          </div>
+
+          <div class="d-grid gap-2 mt-3">
+            <button class="btn btn-success btn-lg" (click)="applyForThisLoan()">
+              <i class="bi bi-file-earmark-text"></i> Apply for This Loan
+            </button>
+            <button class="btn btn-secondary" (click)="clearSelection()">
+              <i class="bi bi-arrow-left"></i> Back to List
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Selection Message -->
+    <div class="col-md-6" *ngIf="!selectedScheme">
+      <div class="card shadow-sm">
+        <div class="card-body text-center py-5">
+          <i class="bi bi-hand-index-thumb display-1 text-muted"></i>
+          <h5 class="mt-3 text-muted">Select a loan scheme from the list to view details</h5>
         </div>
       </div>
     </div>

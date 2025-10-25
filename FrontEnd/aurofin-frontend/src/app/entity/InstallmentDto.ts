@@ -8,4 +8,5 @@ export interface InstallmentDto {
   installmentStatus: InstallmentStatus;
   paidDate?: string; // ISO date string
   fineAmt?: number;
+  totalPayable?: number;
 }

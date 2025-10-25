@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppliedLoanApplications } from '../../../entity/AppliedLoanApplications';
 import { ManagerService } from '../../../services/manager-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-requestedloans',
@@ -16,7 +17,7 @@ export class Requestedloans implements OnInit {
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private managerService: ManagerService) { }
+  constructor(private managerService: ManagerService,private router:Router) { }
 
   ngOnInit(): void {
     this.fetchRequestedLoans();
@@ -101,5 +102,10 @@ export class Requestedloans implements OnInit {
 
   isPending(status: string): boolean {
     return status.toLowerCase() === 'pending';
+  }
+
+  viewApplication(loan: AppliedLoanApplications): void {
+    // Navigate to a detailed view page with the application ID
+    this.router.navigate(['/manager/loan-application', loan.applicationId]);
   }
 }

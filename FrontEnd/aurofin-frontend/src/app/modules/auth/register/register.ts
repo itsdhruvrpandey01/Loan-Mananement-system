@@ -14,6 +14,13 @@ export class Register {
 
   registerForm: FormGroup;
   errorMessage: string = '';
+  showPassword = false;
+
+togglePasswordVisibility() {
+  this.showPassword = !this.showPassword;
+  const pwdInput = document.getElementById('password') as HTMLInputElement;
+  pwdInput.type = this.showPassword ? 'text' : 'password';
+}
 
   constructor(private fb: FormBuilder, private authService: auth, private router: Router) {
     this.registerForm = this.fb.group({

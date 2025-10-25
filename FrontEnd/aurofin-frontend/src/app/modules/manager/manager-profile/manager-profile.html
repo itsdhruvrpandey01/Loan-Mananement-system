@@ -1,1 +1,159 @@
-<p>manager-profile works!</p>
+<div class="pt-3 pb-2 mb-3">
+  <h2 class="h3 mb-4">Manager Profile</h2>
+
+  <!-- Success/Error Messages -->
+  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="bi bi-check-circle me-2"></i>{{ successMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i>{{ errorMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+
+  <!-- Personal Details Card -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Personal Details</h5>
+      <button class="btn btn-sm btn-light" (click)="toggleEditDetails()" *ngIf="!editingDetails">
+        <i class="bi bi-pencil me-1"></i>Edit
+      </button>
+    </div>
+    <div class="card-body">
+      <!-- View Mode -->
+      <div *ngIf="!editingDetails" class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label text-muted small">First Name</label>
+          <p class="fw-semibold">{{ profileDetails.firstName || '-' }}</p>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Middle Name</label>
+          <p class="fw-semibold">{{ profileDetails.middleName || '-' }}</p>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Last Name</label>
+          <p class="fw-semibold">{{ profileDetails.lastName || '-' }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted small">Mobile Number</label>
+          <p class="fw-semibold">{{ profileDetails.mobile || '-' }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted small">Gender</label>
+          <p class="fw-semibold">{{ profileDetails.gender || '-' }}</p>
+        </div>
+      </div>
+
+      <!-- Edit Mode -->
+      <div *ngIf="editingDetails">
+        <form>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">First Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" [(ngModel)]="detailsForm.firstName" name="firstName" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Middle Name</label>
+              <input type="text" class="form-control" [(ngModel)]="detailsForm.middleName" name="middleName">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Last Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" [(ngModel)]="detailsForm.lastName" name="lastName" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control" [(ngModel)]="detailsForm.mobile" name="mobile" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Gender <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="detailsForm.gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-3 d-flex gap-2">
+            <button type="button" class="btn btn-primary" (click)="updateDetails()" [disabled]="loadingDetails">
+              <span *ngIf="!loadingDetails"><i class="bi bi-check me-1"></i>Save Changes</span>
+              <span *ngIf="loadingDetails">
+                <span class="spinner-border spinner-border-sm me-2"></span>Saving...
+              </span>
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="cancelEdit('details')" [disabled]="loadingDetails">
+              <i class="bi bi-x me-1"></i>Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Address Details Card -->
+  <div class="card">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0"><i class="bi bi-geo-alt me-2"></i>Address Details</h5>
+      <button class="btn btn-sm btn-light" (click)="toggleEditAddress()" *ngIf="!editingAddress">
+        <i class="bi bi-pencil me-1"></i>Edit
+      </button>
+    </div>
+    <div class="card-body">
+      <!-- View Mode -->
+      <div *ngIf="!editingAddress" class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label text-muted small">Street</label>
+          <p class="fw-semibold">{{ addressDetails.street || '-' }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted small">Area</label>
+          <p class="fw-semibold">{{ addressDetails.area || '-' }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted small">City</label>
+          <p class="fw-semibold">{{ addressDetails.city || '-' }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-muted small">Pincode</label>
+          <p class="fw-semibold">{{ addressDetails.pincode || '-' }}</p>
+        </div>
+      </div>
+
+      <!-- Edit Mode -->
+      <div *ngIf="editingAddress">
+        <form>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Street <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" [(ngModel)]="addressForm.street" name="street" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Area <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" [(ngModel)]="addressForm.area" name="area" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">City <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" [(ngModel)]="addressForm.city" name="city" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Pincode <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" [(ngModel)]="addressForm.pincode" name="pincode" pattern="[0-9]{6}" required>
+            </div>
+          </div>
+          <div class="mt-3 d-flex gap-2">
+            <button type="button" class="btn btn-success" (click)="updateAddress()" [disabled]="loadingAddress">
+              <span *ngIf="!loadingAddress"><i class="bi bi-check me-1"></i>Save Changes</span>
+              <span *ngIf="loadingAddress">
+                <span class="spinner-border spinner-border-sm me-2"></span>Saving...
+              </span>
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="cancelEdit('address')" [disabled]="loadingAddress">
+              <i class="bi bi-x me-1"></i>Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

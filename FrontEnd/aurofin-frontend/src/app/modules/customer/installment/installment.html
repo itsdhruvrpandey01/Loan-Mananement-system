@@ -1,0 +1,33 @@
+<div class="container mt-4">
+  <h2>Unpaid Installments</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Installment ID</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let inst of installments">
+        <td>{{ inst.installmentId }}</td>
+        <td>{{ inst.instAmt | currency }}</td>
+        <td>{{ inst.installmentStatus }}</td>
+        <td>{{ inst.instStartDate | date }}</td>
+        <td>{{ inst.instEndDate | date }}</td>
+        <td>
+          <button
+            class="btn btn-success"
+            [disabled]="inst.installmentStatus === 'PAID'"
+            (click)="payInstallment(inst)"
+          >
+            Pay Now
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

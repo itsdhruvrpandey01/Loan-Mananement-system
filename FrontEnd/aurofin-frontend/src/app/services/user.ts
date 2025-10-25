@@ -44,5 +44,7 @@ export class user {
     return this.http.get<string>(`${this.baseUrl}/getCusomerID/${userId}`);
   }
 
-  
+  getManagerID(userID: string): Observable<string> {
+    return this.http.get<string>(`${this.baseUrl}/managers/${userID}`);
+  }
 }

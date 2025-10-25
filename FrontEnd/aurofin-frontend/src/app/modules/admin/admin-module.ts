@@ -9,6 +9,8 @@ import { Collateral } from './collateral/collateral';
 import { Loantype } from './loantype/loantype';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ListEmployees } from './list-employees/list-employees';
+import { ListLoans } from './list-loans/list-loans';
+import { Vieweditloanscheme } from './vieweditloanscheme/vieweditloanscheme';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { ListEmployees } from './list-employees/list-employees';
     Addmanager,
     Collateral,
     Loantype,
-    ListEmployees
+    ListEmployees,
+    ListLoans,
+    Vieweditloanscheme
   ],
   imports: [
     CommonModule,

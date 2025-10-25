@@ -1,21 +1,16 @@
-.employee-container {
-  margin: 20px;
+.table-hover tbody tr {
+  transition: background-color 0.2s ease-in-out;
 }
 
-.employee-table {
-  width: 100%;
-  border-collapse: collapse;
+.table-hover tbody tr:hover {
+  background-color: #f1f7ff;
 }
 
-.employee-table th,
-.employee-table td {
-  padding: 8px;
-  text-align: left;
+.card {
+  animation: fadeIn 0.4s ease-in-out;
 }
 
-.pagination-buttons {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

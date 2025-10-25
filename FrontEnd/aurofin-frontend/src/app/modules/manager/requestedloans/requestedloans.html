@@ -6,7 +6,9 @@
   <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
 
   <!-- Loading -->
-  <div *ngIf="loading" class="loading"><p>Loading loan applications...</p></div>
+  <div *ngIf="loading" class="loading">
+    <p>Loading loan applications...</p>
+  </div>
 
   <!-- No Loans -->
   <div *ngIf="!loading && requestedLoans.length === 0" class="no-data">
@@ -27,12 +29,16 @@
           <th>Total Amount</th>
           <th>Status</th>
           <th>Applied On</th>
+          <th>Missing Docs</th> <!-- ✅ new column -->
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let loan of requestedLoans">
           <td>{{ loan.applicationId.substring(0, 8) }}...</td>
+          <td>{{ loan.customerName }}</td>
+          <td>{{ loan.customerEmail }}</td>
+          <td>{{ loan.customerMobileNumber }}</td>
           <td>₹{{ loan.requestedAmount | number:'1.2-2' }}</td>
           <td>{{ loan.requestedTenure }} months</td>
           <td>₹{{ loan.totalLoanAmount | number:'1.2-2' }}</td>
@@ -42,20 +48,23 @@
             </span>
           </td>
           <td>{{ loan.createdAt | date:'dd/MM/yyyy' }}</td>
-          <td class="actions">
-            <button *ngIf="isPending(loan.status)" 
-                    (click)="viewMissingDocuments(loan.applicationId)" 
-                    class="btn-info">
-              📄 Docs
+
+          <!-- ✅ Just show button or count -->
+          <td>
+            <button (click)="viewMissingDocuments(loan.applicationId)" class="btn-info">
+              View
             </button>
-            <button *ngIf="isPending(loan.status)" 
-                    (click)="approveLoan(loan.applicationId)" 
-                    class="btn-approve">
+          </td>
+
+          <!-- Actions -->
+          <td class="actions">
+            <button (click)="viewApplication(loan)" class="btn-view">
+              👁 View Application
+            </button>
+            <button *ngIf="isPending(loan.status)" (click)="approveLoan(loan.applicationId)" class="btn-approve">
               ✓ Approve
             </button>
-            <button *ngIf="isPending(loan.status)" 
-                    (click)="rejectLoan(loan.applicationId)" 
-                    class="btn-reject">
+            <button *ngIf="isPending(loan.status)" (click)="rejectLoan(loan.applicationId)" class="btn-reject">
               ✗ Reject
             </button>
             <span *ngIf="!isPending(loan.status)" class="completed">

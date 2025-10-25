@@ -15,6 +15,7 @@ export class Loanscheme {
 loanForm!: FormGroup;
   loanTypes: LoanTypeResponseDto[] = [];
   collaterals: CollatoralTypeResponseDto[] = [];
+  availableCollaterals: CollatoralTypeResponseDto[] = [];
 
   constructor(private fb: FormBuilder, private adminService: AdminService) {}
 
@@ -51,7 +52,7 @@ loanForm!: FormGroup;
 
   fetchLoanTypes(): void {
     this.adminService.getAllLoanTypes().subscribe({
-      next: (types) => this.loanTypes = types,
+      next: (types) => (this.loanTypes = types),
       error: (err) => console.error('Failed to load loan types', err)
     });
   }
@@ -60,10 +61,7 @@ loanForm!: FormGroup;
     this.adminService.getAllCollaterals().subscribe({
       next: (data) => {
         this.collaterals = data;
-        // Add one form group per collateral
-        if (this.loanForm.get('collateralRequired')?.value) {
-          this.addCollateralFormGroups();
-        }
+        this.availableCollaterals = [...data];
       },
       error: (err) => console.error('Failed to load collaterals', err)
     });
@@ -74,19 +72,44 @@ loanForm!: FormGroup;
     this.collateralRequirements.clear();
 
     if (checked) {
-      this.addCollateralFormGroups();
+      this.availableCollaterals = [...this.collaterals];
+      this.addCollateralBox(); // show one by default
     }
   }
 
-  addCollateralFormGroups(): void {
-    for (let collateral of this.collaterals) {
-      this.collateralRequirements.push(
-        this.fb.group({
-          collatoralId: [collateral.collateralTypeId, Validators.required],
-          requiredDocuments: [''] // Will be converted to array on submit
-        })
-      );
-    }
+  addCollateralBox(): void {
+    if (this.availableCollaterals.length === 0) return;
+
+    const group = this.fb.group({
+      collatoralId: ['', Validators.required],
+      requiredDocuments: ['']
+    });
+
+    this.collateralRequirements.push(group);
+  }
+
+  removeCollateralBox(index: number): void {
+    this.collateralRequirements.removeAt(index);
+    this.updateAvailableCollaterals();
+  }
+
+  updateAvailableCollaterals(): void {
+    const selectedIds = this.collateralRequirements.controls
+      .map((g) => g.get('collatoralId')?.value)
+      .filter((v) => v);
+
+    this.availableCollaterals = this.collaterals.filter(
+      (c) => !selectedIds.includes(c.collateralTypeId)
+    );
+  }
+
+  availableCollateralsForIndex(index: number): CollatoralTypeResponseDto[] {
+    const selectedIds = this.collateralRequirements.controls
+      .map((g, i) => (i === index ? null : g.get('collatoralId')?.value))
+      .filter((v) => v);
+    return this.collaterals.filter(
+      (c) => !selectedIds.includes(c.collateralTypeId)
+    );
   }
 
   onSubmit(): void {
@@ -97,7 +120,6 @@ loanForm!: FormGroup;
 
     let formValue = this.loanForm.value;
 
-    // Convert requiredDocuments (comma-separated string) to string[]
     formValue.collateralRequirements = formValue.collateralRequirements.map((item: any) => ({
       ...item,
       requiredDocuments: item.requiredDocuments

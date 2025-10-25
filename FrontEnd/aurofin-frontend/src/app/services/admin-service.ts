@@ -12,6 +12,7 @@ import { LoanTypeResponseDto } from '../entity/LoanTypeResponseDto';
 import { CollateralTypeDto } from '../entity/CollateralTypeDto';
 import { CollatoralTypeResponseDto } from '../entity/CollatoralTypeResponseDto';
 import { PageResponseDto } from '../entity/PageResponseDto';
+import { UpdateLoanSchemeDto } from '../entity/updateLoanScheme';
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +82,7 @@ export class AdminService {
     return this.http.get<CollatoralTypeResponseDto[]>(`${this.baseUrl}/loans/collaterals`);
   }
 
-  updateLoanScheme(id: number, dto: LoanSchemeDto): Observable<LoanResponseDto> {
+  updateLoanScheme(id: number, dto: UpdateLoanSchemeDto): Observable<LoanResponseDto> {
   return this.http.put<LoanResponseDto>(`${this.baseUrl}/loans/${id}`, dto);
 }
 

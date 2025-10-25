@@ -17,16 +17,6 @@ export class Customerprofile implements OnInit {
 
   ngOnInit(): void {
     this.loadUserProfile();
-    this.userService.getCustomerIdByUserId(this.userId).subscribe({
-      next: (customerId) => {
-        console.log('Customer ID:', customerId);
-        localStorage.setItem('customerId', customerId);
-      },
-      error: (err) => {
-        console.error('Error fetching customer ID:', err);
-      }
-    });
-
   }
 
   loadUserProfile() {

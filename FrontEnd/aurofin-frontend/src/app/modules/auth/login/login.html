@@ -1,33 +1,77 @@
-<p>login works!</p>
-
-<div class="login-container">
-  <h2>Login</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="login()">
-    <div>
-      <label>Email:</label>
-      <input type="email" formControlName="email" placeholder="Enter email" />
-      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-        Valid email is required
+<!-- login.component.html -->
+<div class="container-fluid login-page min-vh-100 d-flex p-0">
+  <div class="row g-0 flex-grow-1">
+    <!-- Left image / brand side -->
+    <div class="col-md-6 d-none d-md-flex bg-image align-items-center justify-content-center text-white">
+      <div class="text-center px-4">
+        <h1 class="fw-bold display-5">Loan Management System</h1>
+        <p class="lead">Manage loans, track repayments & stay secure.</p>
       </div>
     </div>
+    <!-- Right side: login form -->
+    <div class="col-md-6 d-flex align-items-center justify-content-center bg-light">
+      <div class="card shadow-sm m-4 p-4" style="max-width: 400px; width:100%;">
+        <div class="text-center mb-4">
+          <img src="/assets/logo.png" alt="Logo" style="height: 50px;">
+          <h4 class="mt-2">Sign In</h4>
+          <small class="text-muted">Enter your credentials to access your dashboard</small>
+        </div>
 
-    <div>
-      <label>Password:</label>
-      <input type="password" formControlName="password" placeholder="Enter password" />
-      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-        Password is required
+        <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input id="email" type="email"
+                   class="form-control"
+                   formControlName="email"
+                   placeholder="you@example.com"
+                   required>
+            <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                 class="form-text text-danger">
+              Valid email is required.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <input id="password" type="{{ showPassword ? 'text' : 'password' }}"
+                     class="form-control"
+                     formControlName="password"
+                     placeholder="••••••••"
+                     required>
+              <button type="button"
+                      class="btn btn-outline-secondary"
+                      (click)="togglePasswordVisibility()"
+                      tabindex="-1">
+                <i class="bi" [ngClass]="{ 'bi-eye': !showPassword, 'bi-eye-slash': showPassword }"></i>
+              </button>
+            </div>
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                 class="form-text text-danger">
+              Password is required.
+            </div>
+          </div>
+
+
+          <div *ngIf="errorMessage" class="alert alert-danger py-2">
+            {{ errorMessage }}
+          </div>
+
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">
+              Login
+            </button>
+          </div>
+
+          <div class="text-center">
+            <small class="text-muted">Don’t have an account?
+              <a routerLink="/auth/register">Register now</a>
+            </small>
+          </div>
+        </form>
+
       </div>
     </div>
-
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
-
-    <button type="submit" [disabled]="loginForm.invalid">Login</button>
-  </form>
+  </div>
 </div>
-
-
-<a routerLink="/auth/register">Register</a>
-
 <router-outlet></router-outlet>

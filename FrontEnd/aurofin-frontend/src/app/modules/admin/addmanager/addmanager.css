@@ -1,0 +1,43 @@
+.add-manager-page {
+  background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+  min-height: 100vh;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(90deg, #007bff, #0056d2);
+}
+
+.card {
+  border-radius: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+  border-radius: 0.5rem;
+  box-shadow: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #0056d2;
+  box-shadow: 0 0 0 0.2rem rgba(0, 86, 210, 0.15);
+}
+
+.btn {
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+.invalid-feedback {
+  font-size: 0.85rem;
+}
+
+img {
+  max-height: 400px;
+  object-fit: contain;
+}

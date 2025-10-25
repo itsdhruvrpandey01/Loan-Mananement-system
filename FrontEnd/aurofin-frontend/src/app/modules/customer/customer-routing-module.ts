@@ -8,8 +8,13 @@ import { Payment } from './payment/payment';
 import { ViewPayments } from './view-payments/view-payments';
 import { Viewloanschemes } from './viewloanschemes/viewloanschemes';
 import { Listofloans } from './listofloans/listofloans';
+import { Installment } from './installment/installment';
+import { PaymentSuccess } from './payment-success/payment-success';
+import { PaymentFailedComponent } from './payment-failed-component/payment-failed-component';
 
 const routes: Routes = [
+  { path: 'payment-success/:installmentId', component: PaymentSuccess },
+  { path: 'payment-failed', component: PaymentFailedComponent },
   {
     path: '', component: Customerdashboard,
     children: [
@@ -19,10 +24,13 @@ const routes: Routes = [
       { path: 'payment', component: Payment },
       { path: 'view-payments', component: ViewPayments },
       { path: 'view-loan-schemes', component: Viewloanschemes },
-      { path: 'list-of-loans', component: Listofloans }
+      { path: 'list-of-loans', component: Listofloans },
+      { path: 'installments', component: Installment }
     ]
-  }
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

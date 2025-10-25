@@ -12,6 +12,9 @@ import { Customerprofile } from './customerprofile/customerprofile';
 import { Payment } from './payment/payment';
 import { ViewPayments } from './view-payments/view-payments';
 import { Listofloans } from './listofloans/listofloans';
+import { Installment } from './installment/installment';
+import { PaymentSuccess } from './payment-success/payment-success';
+import { PaymentFailedComponent } from './payment-failed-component/payment-failed-component';
 
 
 @NgModule({
@@ -24,6 +27,9 @@ import { Listofloans } from './listofloans/listofloans';
     Payment,
     ViewPayments,
     Listofloans,
+    Installment,
+    PaymentSuccess,
+    PaymentFailedComponent,
   ],
   imports: [
     CommonModule,

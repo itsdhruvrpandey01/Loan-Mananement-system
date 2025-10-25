@@ -1,50 +1,107 @@
-<div class="register-container">
-  <h2>Register</h2>
-  <form [formGroup]="registerForm" (ngSubmit)="register()">
-
-    <label>First Name</label>
-    <input formControlName="firstName" type="text" />
-
-    <label>Middle Name</label>
-    <input formControlName="middleName" type="text" />
-
-    <label>Last Name</label>
-    <input formControlName="lastName" type="text" />
-
-    <label>Email</label>
-    <input formControlName="email" type="email" />
-
-    <label>Password</label>
-    <input formControlName="password" type="password" />
-
-    <label>Mobile</label>
-    <input formControlName="mobile" type="text" />
-
-    <label>Gender</label>
-    <select formControlName="gender">
-      <option value="">Select Gender</option>
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
-      <option value="Other">Other</option>
-    </select>
-
-    <h3>Address</h3>
-    <div formGroupName="address">
-      <label>Street</label>
-      <input formControlName="street" type="text" />
-
-      <label>Area</label>
-      <input formControlName="area" type="text" />
-
-      <label>City</label>
-      <input formControlName="city" type="text" />
-
-      <label>Pincode</label>
-      <input formControlName="pincode" type="text" />
+<div class="container-fluid register-page min-vh-100 d-flex p-0">
+  <div class="row g-0 flex-grow-1">
+    <!-- Left side: Image / Info -->
+    <div class="col-md-6 d-none d-md-flex bg-image align-items-center justify-content-center text-white">
+      <div class="text-center px-4">
+        <h1 class="fw-bold display-5">Join Us</h1>
+        <p class="lead">Create your account and start managing loans efficiently.</p>
+      </div>
     </div>
 
-    <button type="submit">Register</button>
-  </form>
+    <!-- Right side: Form -->
+    <div class="col-md-6 d-flex align-items-center justify-content-center bg-light">
+      <div class="card shadow-sm m-4 p-4" style="max-width: 500px; width:100%;">
+        <div class="text-center mb-4">
+          <img src="/assets/logo.png" alt="Logo" style="height: 50px;">
+          <h4 class="mt-2">Create Account</h4>
+          <small class="text-muted">Fill in your details to register</small>
+        </div>
 
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+        <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="firstName" class="form-label">First Name</label>
+              <input id="firstName" type="text" class="form-control" formControlName="firstName" placeholder="John">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="middleName" class="form-label">Middle Name</label>
+              <input id="middleName" type="text" class="form-control" formControlName="middleName" placeholder="M.">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input id="lastName" type="text" class="form-control" formControlName="lastName" placeholder="Doe">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" type="email" class="form-control" formControlName="email" placeholder="you@example.com">
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <input id="password" [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password" placeholder="••••••••">
+              <button type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()" tabindex="-1">
+                <i class="bi" [ngClass]="{ 'bi-eye': !showPassword, 'bi-eye-slash': showPassword }"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="mobile" class="form-label">Mobile</label>
+            <input id="mobile" type="text" class="form-control" formControlName="mobile" placeholder="9876543210">
+          </div>
+
+          <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <select id="gender" class="form-select" formControlName="gender">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <h5 class="mt-4 mb-3 border-bottom pb-2">Address</h5>
+
+          <div formGroupName="address" class="row">
+            <div class="col-md-6 mb-3">
+              <label for="street" class="form-label">Street</label>
+              <input id="street" type="text" class="form-control" formControlName="street">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="area" class="form-label">Area</label>
+              <input id="area" type="text" class="form-control" formControlName="area">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="city" class="form-label">City</label>
+              <input id="city" type="text" class="form-control" formControlName="city">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="pincode" class="form-label">Pincode</label>
+              <input id="pincode" type="text" class="form-control" formControlName="pincode">
+            </div>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger py-2">
+            {{ errorMessage }}
+          </div>
+
+          <div class="d-grid mt-3 mb-3">
+            <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">
+              Register
+            </button>
+          </div>
+
+          <div class="text-center">
+            <small class="text-muted">
+              Already have an account?
+              <a routerLink="/auth/login">Login here</a>
+            </small>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

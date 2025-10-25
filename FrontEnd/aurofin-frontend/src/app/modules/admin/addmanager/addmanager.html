@@ -1,83 +1,127 @@
-<div class="container">
-  <h2>Add Manager</h2>
-
-  <form [formGroup]="managerForm" (ngSubmit)="onSubmit()" class="mt-4">
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input
-        type="email"
-        id="email"
-        class="form-control"
-        formControlName="email"
-        [class.is-invalid]="managerForm.get('email')?.invalid && managerForm.get('email')?.touched"
-      />
-      <div class="invalid-feedback">Enter a valid email.</div>
+<div class="container-fluid add-manager-page py-4">
+  <div class="row justify-content-center align-items-center">
+    <!-- Left Illustration -->
+    <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
+      <img src="/assets/manager-illustration.png" alt="Add Manager Illustration" class="img-fluid w-75" />
     </div>
 
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input
-        type="password"
-        id="password"
-        class="form-control"
-        formControlName="password"
-        [class.is-invalid]="managerForm.get('password')?.invalid && managerForm.get('password')?.touched"
-      />
-      <div class="invalid-feedback">Password must be at least 6 characters.</div>
-    </div>
+    <!-- Right Form Section -->
+    <div class="col-lg-6 col-md-10">
+      <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-header bg-gradient-primary text-white py-3 text-center">
+          <h3 class="fw-semibold mb-0">
+            <i class="bi bi-person-plus-fill me-2"></i>Add New Manager
+          </h3>
+          <small class="text-light">Enter details to onboard a new manager</small>
+        </div>
 
-    <div class="mb-3">
-      <label for="city" class="form-label">City</label>
-      <input
-        type="text"
-        id="city"
-        class="form-control"
-        formControlName="city"
-        [class.is-invalid]="managerForm.get('city')?.invalid && managerForm.get('city')?.touched"
-      />
-      <div class="invalid-feedback">City is required.</div>
-    </div>
+        <div class="card-body px-4 py-5">
+          <form [formGroup]="managerForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row g-3">
+              <!-- Email -->
+              <div class="col-md-6">
+                <label for="email" class="form-label fw-medium">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  placeholder="manager@example.com"
+                  formControlName="email"
+                  [class.is-invalid]="managerForm.get('email')?.invalid && managerForm.get('email')?.touched"
+                />
+                <div class="invalid-feedback">Enter a valid email.</div>
+              </div>
 
-    <div class="mb-3">
-      <label for="pincode" class="form-label">Pincode</label>
-      <input
-        type="text"
-        id="pincode"
-        class="form-control"
-        formControlName="pincode"
-        [class.is-invalid]="managerForm.get('pincode')?.invalid && managerForm.get('pincode')?.touched"
-      />
-      <div class="invalid-feedback">Pincode must be 6 digits.</div>
-    </div>
+              <!-- Password -->
+              <div class="col-md-6">
+                <label for="password" class="form-label fw-medium">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  placeholder="Minimum 6 characters"
+                  formControlName="password"
+                  [class.is-invalid]="managerForm.get('password')?.invalid && managerForm.get('password')?.touched"
+                />
+                <div class="invalid-feedback">Password must be at least 6 characters.</div>
+              </div>
 
-    <div class="mb-3">
-      <label for="designation" class="form-label">Designation</label>
-      <input
-        type="text"
-        id="designation"
-        class="form-control"
-        formControlName="designation"
-        [class.is-invalid]="managerForm.get('designation')?.invalid && managerForm.get('designation')?.touched"
-      />
-      <div class="invalid-feedback">Designation is required.</div>
-    </div>
+              <!-- City -->
+              <div class="col-md-6">
+                <label for="city" class="form-label fw-medium">City</label>
+                <input
+                  type="text"
+                  id="city"
+                  class="form-control"
+                  placeholder="Enter city"
+                  formControlName="city"
+                  [class.is-invalid]="managerForm.get('city')?.invalid && managerForm.get('city')?.touched"
+                />
+                <div class="invalid-feedback">City is required.</div>
+              </div>
 
-    <div class="mb-3">
-      <label for="salary" class="form-label">Salary</label>
-      <input
-        type="number"
-        id="salary"
-        class="form-control"
-        formControlName="salary"
-        [class.is-invalid]="managerForm.get('salary')?.invalid && managerForm.get('salary')?.touched"
-      />
-      <div class="invalid-feedback">Enter a valid salary.</div>
-    </div>
+              <!-- Pincode -->
+              <div class="col-md-6">
+                <label for="pincode" class="form-label fw-medium">Pincode</label>
+                <input
+                  type="text"
+                  id="pincode"
+                  class="form-control"
+                  placeholder="6-digit pincode"
+                  formControlName="pincode"
+                  [class.is-invalid]="managerForm.get('pincode')?.invalid && managerForm.get('pincode')?.touched"
+                />
+                <div class="invalid-feedback">Pincode must be 6 digits.</div>
+              </div>
 
-    <button type="submit" class="btn btn-primary" [disabled]="managerForm.invalid">
-      Submit
-    </button>
-  </form>
+              <!-- Designation -->
+              <div class="col-md-6">
+                <label for="designation" class="form-label fw-medium">Designation</label>
+                <input
+                  type="text"
+                  id="designation"
+                  class="form-control"
+                  placeholder="e.g., Branch Manager"
+                  formControlName="designation"
+                  [class.is-invalid]="managerForm.get('designation')?.invalid && managerForm.get('designation')?.touched"
+                />
+                <div class="invalid-feedback">Designation is required.</div>
+              </div>
+
+              <!-- Salary -->
+              <div class="col-md-6">
+                <label for="salary" class="form-label fw-medium">Salary</label>
+                <input
+                  type="number"
+                  id="salary"
+                  class="form-control"
+                  placeholder="Enter salary"
+                  formControlName="salary"
+                  [class.is-invalid]="managerForm.get('salary')?.invalid && managerForm.get('salary')?.touched"
+                />
+                <div class="invalid-feedback">Enter a valid salary.</div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid mt-4">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg shadow-sm"
+                [disabled]="managerForm.invalid"
+              >
+                <i class="bi bi-check-circle me-2"></i>Submit
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-footer text-center text-muted small bg-light">
+          <i class="bi bi-info-circle me-1"></i>Ensure all details are correct before submitting.
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 

@@ -11,4 +11,7 @@ export interface AppliedLoanApplications {
   updatedAt: string;
   documentResponseDto: DocumentResponseDto[];
   loanResponse: LoanResponseDto;
+  customerEmail:string;
+	customerName:string;
+	customerMobileNumber:string;
 }

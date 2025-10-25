@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoanSchemeDto } from '../../../entity/LoanSchemeDto';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { LoanResponseDto } from '../../../entity/LoanResponseDto';
 
 @Component({
   selector: 'app-listofloans',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrl: './listofloans.css'
 })
 export class Listofloans implements OnInit {
-  loanSchemes: LoanSchemeDto[] = [];
+  loanSchemes: LoanResponseDto[] = [];
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -19,15 +20,15 @@ export class Listofloans implements OnInit {
   }
 
   loadLoanSchemes() {
-    this.http.get<LoanSchemeDto[]>('http://localhost:8080/loan-app/loans').subscribe({
+    this.http.get<LoanResponseDto[]>('http://localhost:8080/loan-app/loans').subscribe({
       next: (res) => this.loanSchemes = res,
       error: (err) => console.error('Error fetching loan schemes:', err)
     });
   }
 
-  applyLoan(scheme: LoanSchemeDto) {
+  applyLoan(scheme: LoanResponseDto) {
     this.router.navigate(['/customer/applyloan'], {
-      queryParams: { loanId: scheme.loanTypeId }
+      queryParams: { loanId: scheme.loanSchemeId }
     });
   }
 }
